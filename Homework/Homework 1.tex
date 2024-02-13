@@ -1,0 +1,138 @@
+\documentclass[boxes]{rutgers_hw}
+\usepackage{rutgers}
+\usepackage{multicol}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+% \usepackage[none]{hyphenat} % Use to avoid hyphens
+
+
+
+\author{Rohan Karamel} % Enter your name
+\netid{rak218} % Enter your NetID or comment out
+% \collaborators{Leonhard Euler, Bernard Bolzano} % Enter your collaborators or comment out
+\assignment{Homework 1} % Enter the assignment name
+\date{\today} % Replace with due date
+\course{Algorithms} % Enter the course name
+\semester{Spring 2024} % Enter the semester
+\sectionnum{2} % Enter your section number
+\instructor{Professor Szegedy} % Enter your professor's name
+\institution{Rutgers University} % Enter your university
+\renewcommand{\labelenumi}{\alph{enumi}}
+\begin{document}
+
+\maketitle
+
+% You can comment out code by using the percentage symbol
+
+
+\begin{exern}{1} % This is a manually numbered exercise.
+  Book 0.1
+\end{exern}
+\begin{solution} % This is a solution environment. 
+  \hfill
+  \begin{enumerate} 
+    \begin{multicols}{2}
+    
+      \item $f = \Theta(g)$
+      \item $f = O(g)$
+      \item $f = \Theta(g)$
+      \item $f = \Theta(g)$
+      \item $f = \Theta(g)$
+      \item $f = \Theta(g)$
+      \item $f = O(g)$
+      \item $f = \Omega(g)$
+      \item $f = \Omega(g)$
+      \item $f = \Omega(g)$
+      \item $f = O(g)$
+      \item $f = O(g)$
+      \item $f = \Theta(g)$
+      \item $f = \Omega(g)$
+      \item $f = \Omega(g)$
+      \item $f = O(g)$
+      
+    \end{multicols}
+  \end{enumerate}
+\end{solution}
+
+\begin{exern}{2}
+  Book 0.2
+\end{exern}
+\begin{solution}
+    \hfill
+    \begin{enumerate}
+        \item If $c$ is less than $1$, $g(n)$ becomes a geometric series with common ratio, $c$. This series is equivalent to $\frac{1-c^n}{1-c}$ which is bounded between $0$ and $\frac{1}{1-c}$. Therefore, it is $\Theta(1)$.
+        \item If $c$ is equal to $1$, then all terms of the series will also be $1$. Because there are $n$ terms, the series converges to $n$. Therefore, it is $\Theta(n)$.
+        \item We only care about the  dominant term in the series, we will drop terms with lower power and focus on the $c^n$. Therefore, it is $\Theta(c^n)$
+    \end{enumerate}
+\end{solution} 
+
+\begin{exern}{3}
+  Book 1.11: Is $4^{1536} - 9^{4824}$ divisible by $35$?
+\end{exern}
+\begin{solution} 
+  We can show it is divisible by taking each term modulo $35$.
+  \[4^{6k} \equiv 1 \Mod{35} \forall k \in \mathbb{Z}\]
+  \[4^{1536} \equiv 4^{6\cdot256} \equiv 1 \Mod{35}\]
+  Similarly,
+  \[9^{6k} \equiv 1 \Mod{35}\]
+  \[9^{4824} \equiv 9^{6\cdot804} \equiv 1 \Mod{35} \]
+  Therefore, we can simplify the original statement
+  \[4^{1536} - 9^{4824} \equiv 1 - 1 \equiv 0 \Mod{35}\]
+  Therefore $4^{1536} - 9^{4824}$ is divisible by 35.
+\end{solution}
+
+\begin{exern}{4}
+    Book 1.12: What is $2^{2^{2023}}\Mod 3$?
+\end{exern}
+\begin{solution}
+    Notice that \[2 \equiv -1 \Mod 3\]
+    \[2^k \equiv {(-1)}^k \Mod 3\]
+    If $k$ is even, we can simplify this to
+    \[2^k \equiv 1 \Mod 3\]
+    Because $2^{2023}$ is even, we can set $k$ equal to $2^{2023}$
+    \[2^{2^{2023}} \equiv 1 \Mod 3\]
+    And we are done.
+\end{solution}
+
+\pagebreak
+
+\begin{exern}{5}
+    Book 1.14: Suppose you want to compute the $n^{th}$ Fibonacci number modulo $5$. Describe the most efficient way in which you can do this.
+\end{exern}
+\begin{solution}
+    We begin by solving the Fibonacci recurrence relation. This yields the following formula:
+    \[F_n = \frac1{\sqrt5} {\left(\frac{1 + \sqrt 5}2\right)}^n + \frac1{\sqrt5}{\left(\frac{1 + \sqrt5}2\right)}^n\]
+    This formula requires us to only calculate exponentiation for the $n^{th}$ Fibonacci number. Because exponentiation can be done in logarithmic time and exponentiation being the most time-consuming action here, the algorithm would be $O(\log(n))$. Note that exponentiation only runs in logarithmic time for  small n, this means that for large n, the complexity changes.
+\end{solution}
+
+\begin{exern}{6}
+    Grad student A has designed an algorithm whose running time is ${\log(n)}^{\log(n)}$. Grad student B has designed an algorithm whose running time is $\frac n{\log(n)}$. Which student has the better algorithm as $n$ goes to $\infty$?
+\end{exern}
+\begin{solution}
+    Grad student B has a vastly better algorithm as $n \to \infty$. B's algorithm is faster than linear time and A's is worse than exponential time.
+\end{solution}
+
+\begin{exern}{7}
+    Book 1.17
+\end{exern}
+\begin{solution}
+    The iterative approach requires $y-1$ multiplications therefore, in terms of $y$ and $n$, this algorithm has a running time of $n^2(y-1)$. The recursive approach would have a running time of $n^2\log(y-1)$ because there are $\log(y-1)$ multiplications. Overall, the recursive approach is more efficient as it runs in logarithmic time.  
+\end{solution}
+
+\pagebreak
+
+\begin{exern}{8}
+    Book 1.20
+\end{exern}
+\begin{solution}
+    \hfill
+    \begin{enumerate}
+        \item $4$ because $4 \cdot 20 = 80 \equiv 1 \Mod {79}$ 
+        \item $21$ because $21 \cdot 3 = 63 \equiv 1 \Mod {62}$
+        \item The inverse does not exist because $21$ and $91$ are not coprime as they are both divisible by $7$.
+        \item $14$ because $14 \cdot 5 = 70 \equiv 1 \Mod {23}$
+    \end{enumerate}
+\end{solution}
+
+
+
+\end{document}
