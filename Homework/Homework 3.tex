@@ -1,0 +1,230 @@
+\documentclass[boxes]{rutgers_hw}
+\usepackage{rutgers}
+\usepackage{multicol}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+% \usepackage[none]{hyphenat} % Use to avoid hyphens
+
+
+
+\author{Rohan Karamel} % Enter your name
+\netid{rak218} % Enter your NetID or comment out
+% \collaborators{Leonhard Euler, Bernard Bolzano} % Enter your collaborators or comment out
+\assignment{Homework 3} % Enter the assignment name
+\date{\today} % Replace with due date
+\course{Algorithms} % Enter the course name
+\semester{Spring 2024} % Enter the semester
+\sectionnum{2} % Enter your section number
+\instructor{Professor Szegedy} % Enter your professor's name
+\institution{Rutgers University} % Enter your university
+\newtheorem*{solutions}{Solution}
+\renewcommand{\labelenumi}{\alph{enumi}}
+\begin{document}
+
+\maketitle
+
+\begin{exern}{1.27}
+\end{exern}
+\begin{solutions}
+    The value of $d$ should be the multiplicative inverse of $3 \Mod{352}$.
+    Using Euclid's algorithm first:
+    \[352 = 3\cdot 117 + 1\]
+    \[3 = 1 \cdot 3 + 0\]
+    Extended Euclid's is thus:
+    \[1 = 352 + 3\cdot (-117)\]
+    \[-117 \equiv 235 \text{ mod } 352\]
+    Therefore, $d = 235$. Thus, we only need to calculate $41^3 \Mod{391}$ to find the encryption:
+
+    \begin{align*}
+        41^3 &\equiv 68921 \pmod{391} \\
+        &\equiv 68921 - 176 \times 391 \quad \\
+        &\equiv 68921 - 68616 \\
+        &\equiv 105 \pmod{391} \\
+    \end{align*}
+    
+    Therefore, \(41^3 \Mod {391} = 105\).
+    
+\end{solutions}
+
+\pagebreak
+
+\begin{exern}{1.28}
+\end{exern}
+\begin{solutions}
+    Given \(p = 7\) and \(q = 11\), calculate:
+    \begin{align*}
+        n &= pq \\
+        &= 7 \times 11 \\
+        &= 77
+    \end{align*}
+
+    Calculate \(\phi(n)\):
+    \begin{align*}
+        \phi(n) &= (p-1)(q-1) \\
+        &= (7-1)(11-1) \\
+        &= 6 \times 10 \\
+        &= 60
+    \end{align*}
+
+    Now, choose a public exponent \(e\). Let's say \(e = 17\) (common choice).
+
+    Calculate the private exponent \(d\) such that \(ed \equiv 1 \pmod{\phi(n)}\):
+    \begin{align*}
+        de &\equiv 1 \pmod{60} \\
+        17d &\equiv 1 \pmod{60}
+    \end{align*}
+
+    Solving for \(d\):
+    \begin{align*}
+        d &\equiv 6 \pmod{60}
+    \end{align*}
+
+    So, $d = 6$.
+    We pick $e = 7$ because it is the smallest number that is relatively prime to 60.
+\end{solutions}
+
+\begin{exern}{1.29}
+\end{exern}
+\begin{enumerate}
+    \item
+        \begin{solutions}
+            This function is universal. By calculation, the appropriate number of bits is $2log_{2}{m}$
+        \end{solutions}
+    \item
+        \begin{solutions}
+            H is not universal as m is no longer prime so the number of bits is not applicable to solve for.
+        \end{solutions}
+    \item
+        \begin{solutions}
+            This function is universal, thus, the number of bits is 
+            \[\log{m-1^{m}} = m\log{m-1}\]
+        \end{solutions}
+\end{enumerate}
+
+\pagebreak
+
+\begin{exern}{1.31}
+\end{exern}
+\begin{solutions}
+    If $N$ is an $n$-bit number, $N$! is approximately $\Theta(n^3)$ bits long.
+    We reach this approximation by recognizing that $N! < N^N$ for all positive integers. 
+    So, by calculating the number of bits of $N^N$, we can find a decent upper bound.
+    The number of bits is as follows:
+    \[ \log_2{\left(N^N\right)} = N\log_2{(N)} = N \cdot n\]
+    From the previous homework, we know we can also find a decent lower bound by finding the number of bits in ${\left(\frac{N}2\right)}^{\frac{N}2}$.
+    The number of bits is as follows:
+    \[ \log_2{\left({\frac{N}2}^{\frac{N}2}\right)} = {\frac{N}2}\log_2{({\frac{N}2})} = {\frac{N}2} \cdot {(n-1)}\]
+    Thus, the upper bound is $O(Nn)$ and the lower bound is $\Omega(Nn)$. 
+    Therefore, because these bounds are approximately equal, then the number of bits of $N$! is $\Theta(Nn)$.
+    \hfill \break \\
+    To compute $N$!, we proceed by the following algorithm:
+    \begin{description}
+        \item[1] factorial (int n):
+        \item[2] \hspace{5 mm} if $n$ is 0: return 0
+        \item[3] \hspace{5 mm} else return $n \cdot \text{factorial}(n-1)$
+    \end{description}
+    This algorithm runs N times, each of which performing a multiplication of $n$ bits and $n-1$ bits long.
+    Therefore, the running time is O$(N\cdot n^2)$.
+    \hfill \break \\
+    If we are using Karatsuba's algorithm, then our algorithm improves to O$(N\cdot n^{1.585})$
+\end{solutions}
+
+\pagebreak
+
+\begin{exern}{2.4}
+\end{exern}
+\begin{solutions}
+    \begin{enumerate}
+        \item Algorithm A
+        \begin{solution}
+            The runtime of this algorithm is $T(n) = 5T(n/2) + O(n)$. By Master's Theorem, we have that this algorithm runs in $\Theta(n^{\log_{2}{5}})$.
+        \end{solution}
+        \item Algorithm B
+        \begin{solution}
+            The runtime of this algorithm is $T(n) = 2T(n-1) + O(1)$. By Master's Theorem, we have that this algorithm runs in $\Theta(2^n)$.
+        \end{solution}
+        \item Algorithm C
+        \begin{solution}
+            The runtime of this algorithm is $T(n) = 9T(n/3) + O(n^{2})$. By Master's Theorem, we have that this algorithm runs in $\Theta(n^{2}\log_{3}{n})$
+        \end{solution}
+        \item Conclusions: We choose Algorithm C because the exponent is smaller and we can completely ignore the log.
+    \end{enumerate}
+\end{solutions}
+
+\begin{exern}{2.5}
+\end{exern}
+\begin{solutions}
+    \begin{enumerate}
+        \item $T(n) = 2T(n/3) + 1$
+        \begin{solution}
+            Using Master's Theorem $e = \log_{3}{2}, d = 0$. Because $e > d$, we have $\Theta(n^{\log_{3}{2}})$.
+        \end{solution}
+        \item $T(n) = 5T(n/4) + n$
+        \begin{solution}
+            $e = \log_{4}{5}, d = 1$. $e > d$, so we have $\Theta(n^{\log_{4}{5}})$
+        \end{solution}
+        \item $T(n) = 7T(n/7) + n$
+        \begin{solution}
+            $e = \log_{7}{7} = 1, d = 1$. $e = d$, so we have $\Theta(n\log_{7}{n})$.
+        \end{solution}
+        \item $T(n) = 9T(n/3) + n^{2}$
+        \begin{solution}
+            $e = \log_{3}{9} = 2, d = 2$. Because $e = d$, we have $\Theta(n^{2}\log{n})$.
+        \end{solution}
+        \item $T(n) = 8T(n/2) + n^{3}$
+        \begin{solution}
+            $e = \log_{2}{8} = 3, d = 3$. Because $e = d$, we have $\Theta(n^{3}\log{n})$.
+        \end{solution}
+        \item $T(n) = 49T(n/25) + n^{3/2}\text{log}(n)$
+        \begin{solution}
+            $e = \log_{25}{49}, d = 3/2$. Because $d > e$, we have $\Theta(n^{1.5})$.
+        \end{solution}
+        \item $T(n) = T(n - 1) + 2$
+        \begin{solution}
+            $\Theta(n)$
+        \end{solution}
+        \item $T(n) = T(n - 1) + n^{c}$, where $c \geq 1$ is a constant
+        \begin{solution}
+            $\Theta(n^{c+1})$
+        \end{solution}
+        \item $T(n) = T(n - 1) + c^{n}$, where $c > 1$ is some constant
+        \begin{solution}
+            $\Theta(n\cdot c^n)$
+        \end{solution}
+        \item $T(n) = 2T(n - 1) + 1$
+        \begin{solution}
+            $\Theta(2^n)$
+        \end{solution}
+        \item $T(n) = T(\sqrt{n}) + 1$
+        \begin{solution}
+            $\Theta(n) = \log_2{(\log_2{n})}$
+        \end{solution}
+    \end{enumerate}
+\end{solutions}
+
+\pagebreak
+
+\begin{exern}{2.8}
+\end{exern}
+\begin{solutions}
+    The appropriate value of $\omega_4$ is $i$ as $\omega_4 = e^{\frac{{\pi}{i}}2}$.
+    We apply the FFT Algorithm on $(1,0,0,0)$:
+    \begin{align*}
+        X[0] &= 1 + 0 + 0 + 0 = 1 \\
+        X[1] &= 1 + \omega_4 \cdot 0 + \omega_4^2 \cdot 0 + \omega_4^3 \cdot 0 = 1 \\
+        X[2] &= 1 + \omega_4 \cdot 0 + \omega_4^2 \cdot 0 + \omega_4^3 \cdot 0 = 1 \\
+        X[3] &= 1 + \omega_4 \cdot 0 + \omega_4^2 \cdot 0 + \omega_4^3 \cdot 0 = 1
+    \end{align*}
+    The result is: $\left(1,1,1,1\right)$
+    \hfill \break \\
+
+    We apply the FFT Algorithm on $(1,0,1,-1)$:
+    \begin{align*}
+        X[0] &= 1 + 0 + 1 + (-1) = 1 \\
+        X[1] &= 1 + \omega_4 \cdot 0 - \omega_4^2 \cdot 1 + \omega_4^3 \cdot -1 = 0 - \omega_4 = -\omega_4 \\
+        X[2] &= 1 + \omega_4 \cdot 0 + \omega_4^2 \cdot 1 + \omega_4^3 \cdot -1 = 1 + \omega_4^2 = 2 + 1 = 3 \\
+        X[3] &= 1 + \omega_4 \cdot 0 - \omega_4^2 \cdot 1 - \omega_4^3 \cdot -1 = 0 + \omega_4 = \omega_4 \\
+    \end{align*}
+    The results is: $\left(1,-i,3,i\right)$
+\end{solutions}
+
+\end{document}
