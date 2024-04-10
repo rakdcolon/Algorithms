@@ -1,0 +1,386 @@
+\documentclass[boxes]{rutgers_hw}
+\usepackage{rutgers}
+\usepackage{multicol}
+\usepackage{algorithm}
+\usepackage{booktabs}
+\usepackage{algpseudocode}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+% \usepackage[none]{hyphenat} % Use to avoid hyphens
+
+
+
+\author{Rohan Karamel} % Enter your name
+\netid{rak218} % Enter your NetID or comment out
+% \collaborators{Leonhard Euler, Bernard Bolzano} % Enter your collaborators or comment out
+\assignment{Homework 4} % Enter the assignment name
+\date{\today} % Replace with due date
+\course{Algorithms} % Enter the course name
+\semester{Spring 2024} % Enter the semester
+\sectionnum{Section 2} % Enter your section number
+\instructor{Professor Mario Szegedy} % Enter your professor's name
+\institution{Rutgers University} % Enter your university
+\newtheorem*{solutions}{Solution}
+\renewcommand{\labelenumi}{\alph{enumi}}
+
+\begin{document}
+
+    \maketitle
+
+    \begin{exern}{3.1}
+        Perform a depth-first search on the following graph; 
+        whenever there's a choice of vertices, pick the one that is alphabetically first.
+        Classify each edge as a tree edge or back edge, and give the pre and post number of each vertex.
+    \end{exern}
+    \begin{solutions}
+        The graph is shown below with the pre and post numbers of each vertex and the classification of each edge.
+        \begin{center}
+            \begin{tikzpicture}
+                \node[draw, circle] (A) at (0,0) {A};
+                \node[draw, circle] (B) at (2,0) {B};
+                \node[draw, circle] (C) at (4,0) {C};
+                \node[draw, circle] (D) at (0,-2) {D};
+                \node[draw, circle] (E) at (2,-2) {E};
+                \node[draw, circle] (F) at (4,-2) {F};
+                \node[draw, circle] (G) at (0,-4) {G};
+                \node[draw, circle] (H) at (2,-4) {H};
+                \node[draw, circle] (I) at (4,-4) {I};
+                \draw (A) -- (B);
+                \draw[red,dashed] (A) -- (E);
+                \draw (A) -- (B);
+                \draw[red,dashed] (B) -- (E);
+                \draw (C) -- (B);
+                \draw (C) -- (F);
+                \draw[red,dashed] (D) -- (H);
+                \draw (D) -- (G);
+                \draw (F) -- (E);
+                \draw (F) -- (I);
+                \draw (G) -- (H);
+            \end{tikzpicture}
+        \end{center}
+
+        \begin{center}
+            \begin{tabular}{cc}
+                \begin{minipage}{.5\linewidth}
+                    \begin{tabular}{|c|c|c|}
+                        \hline
+                        Vertex & Pre & Post \\
+                        \hline
+                        A & 1 & 12 \\
+                        B & 2 & 11 \\
+                        C & 3 & 10 \\
+                        D & 13 & 18 \\
+                        E & 5 & 8 \\
+                        F & 4 & 9 \\
+                        G & 14 & 17 \\
+                        H & 15 & 16 \\
+                        I & 6 & 7 \\
+                        \hline
+                    \end{tabular}
+                \end{minipage} &
+            
+                \begin{minipage}{.5\linewidth}
+                    \begin{tabular}{|c|c|}
+                        \hline
+                        Edge & Classification\\
+                        \hline
+                        AB & Tree \\
+                        AE & Back \\
+                        BC & Tree \\
+                        BE & Back \\
+                        CF & Tree \\
+                        DH & Back \\
+                        DG & Tree \\
+                        FE & Tree \\
+                        FI & Tree \\
+                        GH & Tree \\
+                        \hline
+                    \end{tabular}
+                \end{minipage} 
+            \end{tabular}
+        \end{center}
+    \end{solutions}
+
+    \begin{exern}{3.2}
+        Perform a depth-first search on the following graph; 
+        whenever there's a choice of vertices, pick the one that is alphabetically first.
+        Classify each edge as a tree edge or back edge, and give the pre and post number of each vertex.
+    \end{exern}
+
+    \begin{solutions}
+        (a) The graph is shown below with the pre and post numbers of each vertex and the classification of each edge.
+        \begin{center}
+            \begin{tikzpicture}
+                \node[draw, circle] (A) at (0,0) {A};
+                \node[draw, circle] (B) at (2,0) {B};
+                \node[draw, circle] (C) at (4,0) {C};
+                \node[draw, circle] (D) at (4,-2) {D};
+                \node[draw, circle] (E) at (2,-2) {E};
+                \node[draw, circle] (F) at (0,-4) {F};
+                \node[draw, circle] (G) at (2,-4) {G};
+                \node[draw, circle] (H) at (4,-4) {H};
+                \draw[->] (A) edge node {} (B);
+                \draw[->, red, dashed, thick] (A) edge node {} (F);
+                \draw[->] (B) edge node {} (C);
+                \draw[->, red, dashed, thick] (B) edge node {} (E);
+                \draw[->] (C) edge node {} (D);
+                \draw[->, red, dashed, thick] (D) edge node {} (B);
+                \draw[->] (D) edge node {} (H);
+                \draw[->, red, dashed, thick] (E) edge node {} (D);
+                \draw[->, red, dashed, thick] (E) edge node {} (G);
+                \draw[->] (F) edge node {} (E);
+                \draw[->, red, dashed, thick] (F) edge node {} (G);
+                \draw[->] (G) edge node {} (F);
+                \draw[->] (H) edge node {} (G);
+            \end{tikzpicture}
+        \end{center}
+
+        \begin{center}
+            \begin{tabular}{cc}
+                \begin{minipage}{.5\linewidth}
+                    \begin{tabular}{|c|c|c|}
+                        \hline
+                        Vertex & Pre & Post \\
+                        \hline
+                        A & 1 & 16 \\
+                        B & 2 & 15 \\
+                        C & 3 & 14 \\
+                        D & 4 & 13 \\
+                        E & 8 & 9 \\
+                        F & 7 & 10 \\
+                        G & 6 & 11 \\
+                        H & 5 & 12 \\
+                        \hline
+                    \end{tabular}
+                \end{minipage} &
+            
+                \begin{minipage}{.5\linewidth}
+                    \begin{tabular}{|c|c|}
+                        \hline
+                        Edge & Classification\\
+                        \hline
+                        AB & Tree \\
+                        AF & Back \\
+                        BC & Tree \\
+                        BE & Back \\
+                        CD & Tree \\
+                        DB & Back \\
+                        DH & Tree \\
+                        ED & Back \\
+                        EG & Back \\
+                        FE & Tree \\
+                        FG & Back \\
+                        GF & Tree \\
+                        HG & Tree \\
+                        \hline
+                    \end{tabular}
+                \end{minipage} 
+            \end{tabular}
+        \end{center}
+
+    \end{solutions}
+
+    \pagebreak
+
+    \begin{solutions}
+        (b) The graph is shown below with the pre and post numbers of each vertex and the classification of each edge.
+        \begin{center}
+            \begin{tikzpicture}
+                \node[draw, circle] (A) at (0,0) {A};
+                \node[draw, circle] (B) at (2,0) {B};
+                \node[draw, circle] (C) at (2,-2) {C};
+                \node[draw, circle] (D) at (2,-4) {D};
+                \node[draw, circle] (E) at (2,-6) {E};
+                \node[draw, circle] (F) at (0,-6) {F};
+                \node[draw, circle] (G) at (0,-4) {G};
+                \node[draw, circle] (H) at (-2,-2) {H};
+                \draw[->] (A) edge node {} (B);
+                \draw[->] (B) edge node {} (F);
+                \draw[->] (F) edge node {} (C);
+                \draw[->] (F) edge node {} (D);
+                \draw[->] (D) edge node {} (E);
+                \draw[->] (A) edge node {} (H);
+                \draw[->] (H) edge node {} (G);
+                \draw[->, red, dashed, thick] (C) edge node {} (B);
+                \draw[->, blue, dashed, thick] (D) edge node {} (C);
+                \draw[->, blue, dashed, thick] (G) edge node {} (B);
+                \draw[->, blue, dashed, thick] (G) edge node {} (F);
+                \draw[->, green, dashed, thick] (F) edge node {} (E);
+                \draw[->, red, dashed, thick] (G) edge node {} (A);
+            \end{tikzpicture}
+        \end{center}
+
+        \begin{center}
+            \begin{tabular}{cc}
+                \begin{minipage}{.5\linewidth}
+                    \begin{tabular}{|c|c|c|}
+                        \hline
+                        Vertex & Pre & Post \\
+                        \hline
+                        A & 1 & 16 \\
+                        B & 2 & 11 \\
+                        C & 4 & 9 \\
+                        D & 5 & 8 \\
+                        E & 6 & 7 \\
+                        F & 3 & 10 \\
+                        G & 13 & 14 \\
+                        H & 12 & 15 \\
+                        \hline
+                    \end{tabular}
+                \end{minipage} &
+            
+                \begin{minipage}{.5\linewidth}
+                    \begin{tabular}{|c|c|}
+                        \hline
+                        Edge & Classification\\
+                        \hline
+                        AB & Tree \\
+                        AH & Tree \\
+                        HG & Tree \\
+                        BF & Tree \\
+                        FC & Tree \\
+                        FD & Tree \\
+                        DE & Tree \\
+                        GA & Back \\
+                        CB & Back \\
+                        GB & Cross \\
+                        GF & Cross \\
+                        DC & Cross \\
+                        FE & Forward \\
+                        \hline
+                    \end{tabular}
+                \end{minipage} 
+            \end{tabular}
+        \end{center}
+    \end{solutions}
+
+    \pagebreak
+
+    \begin{exern}{3.3}
+        Run the DFS-based topological ordering algorithm on the following graph. Whenever you have a choice of vertices to explore, always pick the one that is alphabetically first.
+    \end{exern}
+    \begin{solutions}
+        (a) Indicate the pre and post numbers of the nodes.
+        The graph is shown below with the pre and post numbers of each vertex.
+        \begin{center}
+            \begin{tikzpicture}
+                \node[draw, circle] (A) at (0,0) {A};
+                \node[draw, circle] (B) at (0,-2) {B};
+                \node[draw, circle] (C) at (2,-1) {C};
+                \node[draw, circle] (D) at (4,0) {D};
+                \node[draw, circle] (E) at (4,-2) {E};
+                \node[draw, circle] (F) at (6,-1) {F};
+                \node[draw, circle] (G) at (8,0) {G};
+                \node[draw, circle] (H) at (8,-2) {H};
+                \draw[->] (A) edge node {} (C);
+                \draw[->] (B) edge node {} (C);
+                \draw[->] (C) edge node {} (D);
+                \draw[->] (C) edge node {} (E);
+                \draw[->] (D) edge node {} (F);
+                \draw[->] (E) edge node {} (F);
+                \draw[->] (F) edge node {} (G);
+                \draw[->] (F) edge node {} (H);
+            \end{tikzpicture}
+        \end{center}
+
+        \begin{center}
+            \begin{tabular}{|c|c|c|}
+                \hline
+                Vertex & Pre & Post \\
+                \hline
+                A & 1 & 14 \\
+                B & 15 & 16 \\
+                C & 2 & 13 \\
+                D & 3 & 10 \\
+                E & 11 & 12 \\
+                F & 4 & 9 \\
+                G & 5 & 6 \\
+                H & 7 & 8 \\
+                \hline
+            \end{tabular}
+        \end{center}
+    \end{solutions}
+
+    \begin{solutions}
+        (b) What are the sources and sinks of this graph?
+        The sources of the graph are the vertices with no incoming edges. In this case, the sources are vertices $A$ and $B$. The sinks of the graph are the vertices with no outgoing edges. In this case, the sinks are vertices $G$ and $H$.
+    \end{solutions}
+
+    \begin{solutions}
+        (c) Give the topological ordering of the vertices.
+        The topological ordering of the vertices is $A, B, C, D, E, F, G, H$.
+    \end{solutions}
+
+    \begin{solutions}
+        (d) How many topological ordering does this graph have?
+        The graph has only $2^3 = 8$ topological orders. This is because the sources $A$ and $B$ can be placed in any order, as well as $D$ and $E$, and the same goes for the sinks $G$ and $H$. 
+    \end{solutions}
+
+    \pagebreak
+
+    \begin{exern}{3.5}
+        The reverse of a directed graph G = (V,E) is another directed graph $G^R = (V,E^R)$ on the same
+        vertex set, but with all edges reversed; that is, $E^R = \{(v, u) : (u, v) \in E\}$.
+        Give a linear-time algorithm for computing the reverse of a graph in adjacency list format.
+    \end{exern}
+
+    \begin{solutions}
+        The algorithm for computing the reverse of a graph in adjacency list format is given below.
+        \begin{algorithm}
+            \caption{Reverse Graph}
+            \begin{algorithmic}[1]
+                \Function{ReverseGraph}{$G$}
+                    \State{$G^R \gets \text{Empty Adjacency List}$}
+                    \For{$u \in G.V$}
+                        \State{$G^R[u] \gets \text{Empty List}$}
+                    \EndFor{}
+                    \For{$u \in G.V$}
+                        \For{$v \in G.Adj[u]$}
+                            \State{$G^R[v].\text{append}(u)$}
+                        \EndFor{}
+                    \EndFor{}
+                    \State{\Return{$G^R$}}
+                \EndFunction{}
+            \end{algorithmic}
+        \end{algorithm} \\
+        The algorithm first initializes an empty adjacency list $G^R$ for the reverse graph. Then, for each vertex $u$ in the original graph, it initializes an empty list in the adjacency list of $G^R$. Finally, for each edge $(u, v)$ in the original graph, it appends $u$ to the adjacency list of $v$ in $G^R$. The algorithm runs in $O(V + E)$ time, where $V$ is the number of vertices and $E$ is the number of edges in the graph.
+        The correctness of the algorithm follows from the fact that for each edge $(u, v)$ in the original graph, the edge $(v, u)$ is added into the reverse graph.
+        The time complexity stems from the two loops, one for each vertex in the graph, and the other for each edge in the graph. Don't be frightened from the double for loop as it is only getting the adjacent vertices of each vertex in the graph.
+    \end{solutions}
+
+    \pagebreak
+
+    \begin{exern}{3.9}
+        For each node u in an undirected graph, let twodegree[u] be the sum of the degrees of u’s neighbors. Show how to compute the entire array of twodegree[·] values in linear time, given a graph in adjacency list format.
+    \end{exern}
+
+    \begin{solutions}
+        The algorithm for computing the entire array of twodegree values in linear time is given below.
+
+
+        The algorithm first initializes an empty array $\text{twodegree}$ for the twodegree values. Then, for each vertex $u$ in the graph, it initializes the twodegree value of $u$ to 0. Finally, for each edge $(u, v)$ in the graph, it adds the length of the adjacency list of $v$ to the twodegree value of $u$. The algorithm runs in $O(V + E)$ time, where $V$ is the number of vertices and $E$ is the number of edges in the graph.
+        The correctness of the algorithm follows from the fact that for each edge $(u, v)$ in the graph, the degree of $v$ is added to the twodegree value of $u$.
+        The time complexity stems from the two loops, one for each vertex in the graph, and the other for each edge in the graph. The algorithm is linear in time because it only traverses the adjacency list of each vertex once.
+
+        \begin{algorithm}
+            \caption{Compute Two Degree}
+            \begin{algorithmic}[1]
+                \Function{ComputeTwoDegree}{$G$}
+                    \State{$\text{twodegree} \gets \text{Empty Array}$}
+                    \For{$u \in G.V$}
+                        \State{$\text{twodegree}[u] \gets 0$}
+                    \EndFor{}
+                    \For{$u \in G.V$}
+                        \For{$v \in G.Adj[u]$}
+                            \State{$\text{twodegree}[u] \gets \text{twodegree}[u] + \text{len}(G.Adj[v])$}
+                        \EndFor{}
+                    \EndFor{}
+                    \State{\Return{$\text{twodegree}$}}
+                \EndFunction{}
+            \end{algorithmic}
+        \end{algorithm}
+
+        The correctness of the algorithm follows from the fact that for each edge $(u, v)$ in the graph, the degree of $v$ (length of linked list) is added to the twodegree value of $u$.
+        The time complexity stems from the two loops, one for each vertex in the graph, and the other for each edge in the graph. The algorithm is linear in time because it only traverses the adjacency list of each vertex once.
+    \end{solutions}
+
+\end{document}

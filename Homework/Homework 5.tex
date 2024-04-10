@@ -1,0 +1,254 @@
+\documentclass[boxes]{rutgers_hw}
+\usepackage{rutgers}
+\usepackage{multicol}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\newcommand{\Mod}[1]{\ (\mathrm{mod}\ #1)}
+% \usepackage[none]{hyphenat} % Use to avoid hyphens
+
+
+
+\author{Rohan Karamel} % Enter your name
+\netid{rak218} % Enter your NetID or comment out
+% \collaborators{Leonhard Euler, Bernard Bolzano} % Enter your collaborators or comment out
+\assignment{Homework 5} % Enter the assignment name
+\date{\today} % Replace with due date
+\course{Algorithms} % Enter the course name
+\semester{Spring 2024} % Enter the semester
+\sectionnum{Section 2} % Enter your section number
+\instructor{Professor Mario Szegedy} % Enter your professor's name
+\institution{Rutgers University} % Enter your university
+\newtheorem*{solutions}{Solution}
+\renewcommand{\labelenumi}{\alph{enumi}}
+\begin{document}
+
+    \maketitle
+
+    \begin{exern}{3.25a}
+        Give a linear-time algorithm that works for directed acyclic graphs.
+    \end{exern}
+
+    \begin{description}
+        \item[Solution] The algorithm is as follows: 
+    \end{description}
+
+    \begin{itemize}
+        \item The algorithm begins by performing a topological sort on the graph G. This is a linear-time operation that provides an ordering of the vertices such that for every directed edge uv from vertex u to vertex v, u comes before v in the ordering. The result of the topological sort is stored in the array T.
+        \item The algorithm then iterates over the vertices in reverse topological order. For each vertex a, it initializes a variable min to the cost of a.
+        \item For each neighbor b of a, it checks if the cost of b is less than min. If it is, it updates min to the cost of b.
+        \item Finally, it sets the cost of a to min. This ensures that the cost of each vertex is the minimum cost of any vertex reachable from it.
+    \end{itemize}
+
+    \pagebreak
+
+    \begin{algorithmic}
+        \Procedure{Cheapest-Node-Reachable} {$G, costs$}
+            \State$n \gets |V|$
+            \State$T[1\dots n] \gets \textsc{Topological-Sort}(G)$
+            \State$ $visited[1\dots n] $\gets$ [\textsc{False}, \dots, \textsc{False}]
+            \For{$a \in [n\dots 1]$}
+                \If{not visited[$a$]}
+                    \State$ $min $\gets$ costs$[a]$
+                    \For{neighbor $b$ of $T(a)$}
+                        \If{min $>$ costs[$b$]}
+                            \State$ $min $\gets$ costs[$b$]
+                        \EndIf$ $
+                    \EndFor$ $
+                    \State$ $costs[$a$] $\gets$ min
+                    \State$ $visited[a] $\gets$ \textsc{True}
+                \EndIf$ $
+            \EndFor{}
+        \EndProcedure{}
+    \end{algorithmic}
+
+    \begin{itemize}
+        \item This algorithm works because in a topologically sorted DAG, every edge goes from a vertex earlier in the order to a vertex later in the order. 
+        Therefore, by the time the algorithm considers a vertex, it has already considered all vertices reachable from it, and so it can correctly compute the minimum cost.
+    \end{itemize}
+
+    \pagebreak
+
+    \begin{exern}{3.25b}
+        Give a linear-time algorithm that works for all directed graphs.
+    \end{exern}
+
+    \begin{itemize}
+        \item To handle cycles in the graph, we can use SCCs. 
+        \item We can use Kosaraju's algorithm to find all SCCs in the graph. Then, for each SCC, we find the minimum cost vertex and assign this cost to the entire SCC
+        \item Finally, we perform a similar process as in the DAG case, but now considering the SCCs instead of individual vertices.
+    \end{itemize}
+
+    \begin{algorithmic}
+        \Procedure{Cheapest-Node-Reachable}{$G, costs$}
+            \State{$n \gets |V|$}
+            \State{$SCCs \gets \textsc{Kosaraju}(G)$}
+            \State{SCC\_costs$[1\dots n] \gets [\infty, \infty, \dots, \infty]$}
+            \For{each $SCC$ in $SCCs$}
+                \State{min $\gets \infty$}
+                \For{each vertex $v$ in $SCC$}
+                    \If{$costs[v] <$ min}
+                        \State{min $\gets costs[v]$}
+                    \EndIf{}
+                \EndFor{}
+                \For{each vertex $v$ in $SCC$}
+                    \State{$SCC\_costs[v] \gets$ min}
+                \EndFor{}
+            \EndFor{}
+            \State{$T[1..n] \gets \textsc{Topological-Sort}(SCCs)$}
+            \For{$a$ in $[n\dots 1]$}
+                \State{min $\gets SCC\_costs[a]$}
+                \For{each neighbor $b$ of $T[a]$}
+                    \If{min $ > SCC\_costs[b]$}
+                        \State{min $\gets SCC\_costs[b]$}
+                    \EndIf{}
+                \EndFor{}
+                \State{$SCC\_costs[a] \gets$ min}
+            \EndFor{}
+        \EndProcedure{}
+    \end{algorithmic}
+
+    \pagebreak
+
+    \begin{description}
+        \item[Run-time Analysis] The run-time of this algorithm is O$(|V| + |E|)$ because Kosaraju's algorithm runs in O$(|V| + |E|)$ time, and the rest of the algorithm runs in O$(|V| + |E|)$ time.
+        \item[Explanation of Correctness] In this algorithm, we first find all the SCCs in the graph using Kosaraju's algorithm. We then find the minimum cost vertex in each SCC and assign this cost to the entire SCC. Finally, we perform a similar process as in the DAG case, but now considering the SCCs instead of individual vertices.
+    \end{description}
+
+    \begin{exern}{4.1a}
+        Suppose Dijkstra’s algorithm is run on the following graph, starting at node A.
+        Draw a table showing the intermediate distance values of all the nodes at each iteration of the algorithm.
+    \end{exern}
+
+    \[\begin{bmatrix}
+        A & B & C & D & E & F & G & H \\
+        0 & \infty& \infty& \infty& \infty& \infty& \infty& \infty\\
+        0 & 1 & \infty& \infty& 4 & 8 & \infty& \infty\\
+        0 & 1 & 3 & \infty& 4 & 7 & 7 & \infty\\
+        0 & 1 & 3 & 4 & 4 & 7 & 5 & \infty\\
+        0 & 1 & 3 & 4 & 4 & 7 & 5 & 8 \\
+        0 & 1 & 3 & 4 & 4 & 7 & 5 & 8 \\
+        0 & 1 & 3 & 4 & 4 & 6 & 5 & 6 \\
+    \end{bmatrix}\]
+    
+    \begin{exern}{4.1b}
+        Suppose Dijkstra’s algorithm is run on the following graph, starting at node A.
+        Show the final shortest-path tree.
+    \end{exern}
+
+    \begin{center}
+        \begin{tikzpicture}[ > = stealth, shorten > = 1pt, auto, node distance = 3cm, semithick ]
+            \node[draw, circle] (A) at (0, 4) {A};
+            \node[draw, circle] (B) at (2, 4) {B};
+            \node[draw, circle] (C) at (2, 2) {C};
+            \node[draw, circle] (D) at (4, 2) {D};
+            \node[draw, circle] (E) at (0, 2) {E};
+            \node[draw, circle] (F) at (0, 0) {F};
+            \node[draw, circle] (G) at (2, 0) {G};
+            \node[draw, circle] (H) at (4, 0) {H};
+            \path[->] (A) edge node {1} (B);
+            \path[->] (A) edge node {4} (E);
+            \path[->] (B) edge node {2} (C);
+            \path[->] (C) edge node {1} (D);
+            \path[->] (C) edge node {2} (G);
+            \path[->] (G) edge node {1} (F);
+            \path[->] (G) edge node {1} (H);
+        \end{tikzpicture}
+    \end{center}
+
+    \begin{exern}{4.2a}
+        Suppose Bellman-Ford's algorithm is run on the following graph, starting at node S (found from topologically sorting).
+        Draw a table showing the intermediate distance values of all the nodes at each iteration of the algorithm.
+    \end{exern}
+
+    \[\begin{bmatrix}
+        S & A     & B     & C     & D     & E     & F     & G     & H     & I \\
+        0 & \infty& \infty& \infty& \infty& \infty& \infty& \infty& \infty& \infty\\
+        0 & 7     & \infty& 6     & \infty& 6     & 5     & \infty& \infty& \infty\\
+        0 & 7     & 11    & 5     & 7     & 6     & 4     & \infty& 9     & \infty\\
+        0 & 7     & 11    & 5     & 7     & 6     & 4     & 8     & 7     & \infty\\
+        0 & 7     & 11    & 5     & 7     & 6     & 4     & 8     & 7     & 7
+    \end{bmatrix}\]
+
+    \begin{exern}{4.2b}
+        Suppose Bellman-Ford's algorithm is run on the following graph, starting at node A.
+        Show the final shortest-path tree.
+    \end{exern}
+
+    \begin{center}
+        \begin{tikzpicture}[ > = stealth, shorten > = 1pt, auto, node distance = 3cm, semithick ]
+            \node[draw, circle] (A) at (2, 4) {A};
+            \node[draw, circle] (B) at (0, 4) {B};
+            \node[draw, circle] (C) at (4, 4) {C};
+            \node[draw, circle] (D) at (4, 2) {D};
+            \node[draw, circle] (E) at (2, 0) {E};
+            \node[draw, circle] (F) at (2, -2) {F};
+            \node[draw, circle] (G) at (0, 0) {G};
+            \node[draw, circle] (H) at (0, 2) {H};
+            \node[draw, circle] (I) at (0, -2) {I};
+            \node[draw, circle] (S) at (2, 2) {S};
+            \path[->] (S) edge node {7} (A);
+            \path[->] (S) edge node {6} (E);
+            \path[->] (A) edge node {4} (B);
+            \path[->] (A) edge node {-2} (C);
+            \path[->] (E) edge node {-2} (F);
+            \path[->] (B) edge node {-4} (H);
+            \path[->] (C) edge node {2} (D);
+            \path[->] (H) edge node {1} (G);
+            \path[->] (G) edge node {-1} (I);
+        \end{tikzpicture}
+    \end{center}
+
+    \pagebreak
+
+    \begin{exern}{4.5}
+        Create a linear-time algorithm that returns the number of distinct shortest paths from u to v.
+    \end{exern}
+
+    \begin{algorithmic}
+        \State\textbf{procedure} \textsc{Count-Shortest-Paths} (\(G, u, v\))
+        \State{shortest\_distance $\gets$ BFS{(G, u, v)} }
+        \State{visited[1\dots n] $\gets$ [false, false, \dots, false]}
+        \State{path\_count $\gets$ 0}
+        \State{DFS{(G, v, u, shortest\_distance, 0, visited, path\_count)}}
+        \State\textbf{return} path\_count \\
+
+        \State\textbf{procedure} \textsc{DFS} (\(G, current, target, sd, cd, visited, pc\))
+        \If{cd $>$ sd}
+            \State\textbf{return}
+        \EndIf{}
+        \If{current = target and cd = sd}
+            \State{pc $\gets$ pc + 1}
+            \State\textbf{return}
+        \EndIf{}
+        \State{visited[current] $\gets$ true}
+        \For{each neighbor of current}
+            \If{not visited[neighbor]}
+                \State{DFS{(G, neighbor, target, sd, cd + 1, visited, pc)}}
+            \EndIf{}
+        \EndFor{}
+        \State{visited[current] $\gets$ false}
+
+    \end{algorithmic}
+
+    \begin{description}
+        \item[Run-time Analysis] The run-time of this algorithm is O$(|V| + |E|)$ because BFS and DFS run in O$(|V| + |E|)$ time. The modified DFS runs in O$(|V| + |E|)$ time because it visits each vertex and edge at most once due to the visited array.
+        \item[Explanation of Correctness] In this algorithm, BFS is a function that runs Breadth-First Search on the graph $G$ from vertex $u$ to vertex $v$ and returns the shortest distance. DFS is a function that performs Depth-First Search on the graph $G$ from the current vertex to the target vertex, keeping track of the current distance and the shortest distance, and increments $path\_count$ whenever it finds a path from $v$ to $u$ with the same length as the shortest path.
+    \end{description}
+
+    \begin{exern}{344helper}
+        Design a BFS-based algorithm to determine if a given undirected graph is bipartite. A graph is bipartite if its vertices can be divided into two disjoint sets such that every edge connects a vertex in one set with a vertex in the other set.
+    \end{exern}
+
+    \begin{itemize}
+        \item The algorithm begins by initializing an array of colors for each vertex. The colors are 0 and 1.
+        \item It then performs a BFS on the graph, starting at an arbitrary vertex.
+        \item For each vertex, it assigns the opposite color of its parent to the vertex. If the vertex already has a color, it checks if the color is the same as the parent's color. If it is, then the graph is not bipartite.
+        \item If the algorithm completes without finding a conflict, then the graph is bipartite.
+    \end{itemize}
+
+    \begin{description}
+        \item[Run-time Analysis] The run-time of this algorithm is O$(|V| + |E|)$ because BFS runs in O$(|V| + |E|)$ time. The algorithm visits each vertex and edge at most once.
+        \item[Explanation of Correctness] In this algorithm, BFS is a function that runs Breadth-First Search on the graph $G$ and assigns colors to each vertex. The algorithm then checks if the colors of the vertices are consistent with the definition of a bipartite graph.
+    \end{description}
+
+\end{document}
